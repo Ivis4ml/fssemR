@@ -21,5 +21,5 @@ install_github("Ivis4ml/fssemR")
 Now, `fssemR` package is uploaded on CRAN. So you will install it via CRAN 
 
 ```r
-install.package("fssemR")
+install.packages("fssemR")
 ```
