@@ -18,8 +18,8 @@ library(devtools)
 install_github("Ivis4ml/fssemR")
 ```
 
-Now, `fssemR` package is available on CRAN. So you also can install it via CRAN 
+Now, `fssemR` package is uploaded on CRAN. So you will install it via CRAN 
 
 ```r
-install.package("fssemR")
+install.packages("fssemR")
 ```
