@@ -7,8 +7,8 @@
 ##' @examples
 ##' seed = as.numeric(Sys.time())
 ##' N = 100                                           # sample size
-##' Ng = 5                                           # gene number
-##' Nk = 5 * 3                                       # eQTL number
+##' Ng = 5                                            # gene number
+##' Nk = 5 * 3                                        # eQTL number
 ##' Ns = 1                                            # sparse ratio
 ##' sigma2 = 0.01                                     # sigma2
 ##' set.seed(seed)

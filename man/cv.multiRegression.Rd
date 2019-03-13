@@ -29,3 +29,6 @@ gamma_min optimal gamma to minimize cross-validation error
 \description{
 cv.multiRegression
 }
+\examples{
+
+}
