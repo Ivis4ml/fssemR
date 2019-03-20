@@ -149,6 +149,19 @@ multiFSSEMiPALM2 = function(Xs, Ys, Bs, Fs, Sk, sigma2, lambda, rho,
         grad = cwiseGradient4FSSEM(n[k], ci[[k]], Ys[[k]][i, ,drop = F], Ri[[k]], Y2norm[[k]][i],sigma2[1])
         grad(bi[[k]])[-i, , drop = F]
       })
+      # `cwiseLipschitz4FSSEM` is the improved version of `lips_cwise_SML` and `lips_rwise_SML` in
+      # ./inst/00_SparsemaximumLiklihood.R; `multiFSSEMiPALM2` is equivalent to `genSML_iPALM` in
+      # deprecated version @ https://github.com/Ivis4ml/FSSEM
+      ## Li = sapply(1:m, function(k) {
+      ##   U = crossprod(ImBs[[k]][, -i])
+      ##   cwiseLipschitzFSSEMv0(n[k], chol2inv(U),
+      ##                    ImBs[[k]][-i, -i],
+      ##                    ImBs[[k]][i, -i, drop = F],
+      ##                    sum((ci[[k]] * Dets[[k]]) ^ 2),
+      ##                    det(U),
+      ##                    Y2norm[[k]][i],
+      ##                    sigma2, p)[1]
+      ##})
       Li = sapply(1:m, function(k) {
         z  = ci[[k]][,i] * Dets[[k]]
         c2 = sum((ci[[k]][, -i] * Dets[[k]])**2)

@@ -87,7 +87,22 @@ cwiseGradient4FSSEM = function(n, c, Y, R, Y2norm, sigma2) {
   }
 }
 
-
+## lipschitz computation
+cwiseLipschitzFSSEMv0 = function(n, o, g, s, c2, Deti, Y2norm, sigma2, p) {
+  oxg = tcrossprod(o, g)
+  Imo = diag(p - 1) - g %*% oxg
+  sog = s %*% oxg
+  c = 1 - s %*% tcrossprod(o, s)
+  zta = 1e-12
+  x = -1 * tcrossprod(chol2inv(Imo + diag(p - 1) * zta), sog)
+  Li = n * c2 / (crossprod(x, Imo %*% x) + 2 * sog %*% x + c) / (Deti + 1e-16) + Y2norm / sigma2
+  while(Li < 0) {
+    zta = zta * 10
+    x = -1 * tcrossprod(chol2inv(Imo + diag(p - 1) * zta), sog)
+    Li = n * c2 / (crossprod(x, Imo %*% x) + 2 * sog %*% x + c) / (Deti + 1e-16) + Y2norm / sigma2
+  }
+  Li
+}
 
 ## speed-up lipschitz computation
 cwiseLipschitz4FSSEM = function(n, z, c2, b2, Y2norm, sigma2) {
