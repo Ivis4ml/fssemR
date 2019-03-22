@@ -62,10 +62,10 @@
 ##'                           verbose = TRUE, trans = TRUE, strict = TRUE)
 ##'
 ##'
-##' (TPR(fitc0$B[[1]], data$Vars$B[[1]]) + TPR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-##' (FDR(fitc0$B[[1]], data$Vars$B[[1]]) + FDR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-##' TPR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
-##' FDR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+##' (TPR(fitc0$Bs[[1]], data$Vars$B[[1]]) + TPR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+##' (FDR(fitc0$Bs[[1]], data$Vars$B[[1]]) + FDR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+##' TPR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+##' FDR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
 ##' @export
 multiFSSEMiPALM2 = function(Xs, Ys, Bs, Fs, Sk, sigma2, lambda, rho,
                            Wl, Wf, p, maxit = 100, inert = inert_opt("linear"), threshold = 1e-6,
@@ -463,10 +463,10 @@ cv.multiFSSEMiPALM2 = function(Xs, Ys, Bs, Fs, Sk, sigma2, nlambda = 20, nrho = 
 ##'
 ##' fitc0 <- fitm$fit
 ##'
-##' (TPR(fitc0$B[[1]], data$Vars$B[[1]]) + TPR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-##' (FDR(fitc0$B[[1]], data$Vars$B[[1]]) + FDR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-##' TPR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
-##' FDR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+##' (TPR(fitc0$Bs[[1]], data$Vars$B[[1]]) + TPR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+##' (FDR(fitc0$Bs[[1]], data$Vars$B[[1]]) + FDR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+##' TPR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+##' FDR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
 opt.multiFSSEMiPALM2 = function(Xs, Ys, Bs, Fs, Sk, sigma2, nlambda = 20, nrho = 20,
                                p, q, wt = TRUE) {
   m   = length(Ys)

@@ -28,10 +28,10 @@ system.time(fitc <<- multiFSSEMiPALM2(Xs = Xs, Ys = Ys, Bs = fit$Bs, Fs = fit$Fs
                             p = Ng, maxit = 100, threshold = 1e-5, sparse = T, verbose = T, trans = T, strict = T))
 
 
-(TPR(fitc$B[[1]], data$Vars$B[[1]]) + TPR(fitc$B[[2]], data$Vars$B[[2]])) / 2
-(FDR(fitc$B[[1]], data$Vars$B[[1]]) + FDR(fitc$B[[2]], data$Vars$B[[2]])) / 2
-TPR(fitc$B[[1]] - fitc$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
-FDR(fitc$B[[1]] - fitc$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+(TPR(fitc$Bs[[1]], data$Vars$B[[1]]) + TPR(fitc$Bs[[2]], data$Vars$B[[2]])) / 2
+(FDR(fitc$Bs[[1]], data$Vars$B[[1]]) + FDR(fitc$Bs[[2]], data$Vars$B[[2]])) / 2
+TPR(fitc$Bs[[1]] - fitc$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+FDR(fitc$Bs[[1]] - fitc$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
 
 
 fitm <- opt.multiFSSEMiPALM2(Xs = Xs, Ys = Ys, Bs = fit$Bs, Fs = fit$Fs, Sk = Sk,
@@ -40,10 +40,10 @@ fitm <- opt.multiFSSEMiPALM2(Xs = Xs, Ys = Ys, Bs = fit$Bs, Fs = fit$Fs, Sk = Sk
 
 fitc0 <- fitm$fit
 
-(TPR(fitc0$B[[1]], data$Vars$B[[1]]) + TPR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-(FDR(fitc0$B[[1]], data$Vars$B[[1]]) + FDR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-TPR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
-FDR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+(TPR(fitc0$Bs[[1]], data$Vars$B[[1]]) + TPR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+(FDR(fitc0$Bs[[1]], data$Vars$B[[1]]) + FDR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+TPR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+FDR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
 
 
 
