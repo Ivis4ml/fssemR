@@ -1,4 +1,5 @@
 ## Introduction
+https://cranlogs.r-pkg.org/badges/fssemR
 
 `fssemR` is a package that ultilizes the Proximal Alternating Linearized Maximal to solve the 
 non-convex non-smooth jointly fused sparse structrual equation model. 

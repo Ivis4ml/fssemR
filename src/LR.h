@@ -5,7 +5,7 @@
 
 template<class MatType>
 inline MatType LR_Shrink(MatType& Xi, MatType& Yi, MatType& yi, double gamma, const int n, const int p, const int k) {
-  Eigen::FullPivLU<MatType> CH(Xi.transpose() * Xi);
+  Eigen::FullPivLU<MatType> CH(Xi.transpose() * Xi); 
   MatType Pi  = MatType::Identity(n, n) - Xi * CH.solve(Xi.transpose());
   MatType I = Yi.transpose() * Pi * Yi;
   I.diagonal().array() += gamma;
@@ -15,11 +15,10 @@ inline MatType LR_Shrink(MatType& Xi, MatType& Yi, MatType& yi, double gamma, co
 }
 
 template<class MatType>
-inline double LR_Trace(MatType& Xi, MatType& Yi, MatType& yi, const int n) {
-  Eigen::FullPivLU<MatType> CH(Xi.transpose() * Xi);
-  MatType Pi  = MatType::Identity(n, n) - Xi * CH.solve(Xi.transpose());
-  MatType I = Yi.transpose() * Pi * Yi;
-  double t = I.diagonal().sum();
+inline double LR_Trace(MatType& Xi, MatType& Yi, MatType& yi) {
+  MatType J = Xi.transpose() * Xi;
+  MatType I = Yi.transpose() * Yi;
+  double t = I.diagonal().sum() + J.diagonal().sum();
   return t;
 }
 
@@ -88,7 +87,7 @@ inline double L2lamax(MatType& X, MatType& Y, IdxType& S, const int n, const int
     Xi = get_Cols(X, S[i-1]);
     Yi = rm_Col(Y, i);
     yi = Y.col(i-1);
-    lambda = max(lambda, LR_Trace(Xi, Yi, yi, n));
+    lambda = max(lambda, LR_Trace(Xi, Yi, yi));
   }
   return lambda;
 }
