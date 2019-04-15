@@ -1,16 +1,16 @@
 ##' FSSEMsolver
 seed = as.numeric(Sys.time())
-N  = 100                                                              # sample size. 500 sample better than 200 sample, very very
+N  = c(100, 120)                                                      # sample size. 500 sample better than 200 sample, very very
 Ng = 30                                                               # gene number
 Nk = 30 * 3                                                           # eQTL number
 Ns = 30 / Ng                                                          # sparse ratio
-sigma2 = 0.01                                                         # sigma2
+sigma2 = 0.10                                                         # sigma2
 set.seed(seed)
 library(fssemR)
 
-data = randomFSSEMdata(n = N, p = Ng, k = Nk, sparse = Ns, df = 0.3, sigma2 = sigma2, u = 5, type = "DG", nhub = 1, dag = T)
+data = randomFSSEMdata2(n = N, p = Ng, k = Nk, sparse = Ns, df = 0.3, sigma2 = sigma2, u = 5, type = "DG", dag = T)
 ## data = randomFSSEMdata(n = N, p = Ng, k = Nk, sparse = Ns, df = 0.3, sigma2 = sigma2, u = 5, type = "ER", nhub = 1)
-data$Data$X = list(data$Data$X, data$Data$X)
+## data$Data$X = list(data$Data$X, data$Data$X)
 gamma = cv.multiRegression(data$Data$X, data$Data$Y, data$Data$Sk, ngamma = 50, nfold = 5, N, Ng, Nk)
 fit   = multiRegression(data$Data$X, data$Data$Y, data$Data$Sk, gamma, N, Ng, Nk, trans = FALSE)
 Xs    = data$Data$X

@@ -50,6 +50,11 @@ multiRegression = function(Xs, Ys, Sk, gamma, n, p, k, trans = FALSE) {
       t(Ys[[i]])
     })
   }
+  if (length(n) != m) {
+    n = sapply(1:m, function(i) {
+      n
+    })
+  }
   fit = .Call("MultiReg", Xs, Ys, Sk, gamma, n, p, k, PACKAGE = "fssemR")
   fit
 }
@@ -67,11 +72,23 @@ multiRegression = function(Xs, Ys, Sk, gamma, n, p, k, trans = FALSE) {
 ##' @param k       number of eQTLs
 ##' @return gamma_min optimal gamma to minimize cross-validation error
 ##' @export
-##' @example 
-##' 
 cv.multiRegression = function(Xs, Ys, Sk, ngamma = 20, nfold = 5, n, p, k) {
   cverr.mat = matrix(0, nrow = ngamma, ncol = nfold)
-  cvfold    = sample(seq(1, nfold), size = n, replace = T)
+  m = length(Ys)
+  if (length(n) != m) {
+    n = sapply(1:m, function(i) {
+      n
+    })
+  }
+  cvfold = vector("list", 2)
+  if (n[1] == n[2]) {
+    cvfold[[1]] = cvfold[[2]] = sample(seq(1, nfold), size = n[1], replace = T)
+  } else {
+    cvfold = lapply(1:m, function(i) {
+      sample(seq(1, nfold), size = n[i], replace = T)
+    })
+  }
+    
   m = length(Ys)
   ## single Xs matrix, extend it
   if (is.matrix(Xs)) {
@@ -86,23 +103,23 @@ cv.multiRegression = function(Xs, Ys, Sk, ngamma = 20, nfold = 5, n, p, k) {
   Ytrain = vector("list", nfold)
   Ytest  = vector("list", nfold)
   for (i in 1:nfold) {
-    Xtrain[[i]] = lapply(Xs, function(X) {
-      X[, cvfold != i, drop = F]
+    Xtrain[[i]] = lapply(1:m, function(mi) {
+      Xs[[mi]][, cvfold[[mi]] != i, drop = F]
     })
-    Xtest[[i]]  = lapply(Xs, function(X) {
-      X[, cvfold == i, drop = F]
+    Xtest[[i]]  = lapply(1:m, function(mi) {
+      Xs[[mi]][, cvfold[[mi]] == i, drop = F]
     })
-    Ytrain[[i]] = lapply(Ys, function(Y) {
-      Y[, cvfold != i, drop = F]
+    Ytrain[[i]] = lapply(1:m, function(mi) {
+      Ys[[mi]][, cvfold[[mi]] != i, drop = F]
     })
-    Ytest[[i]]  = lapply(Ys, function(Y) {
-      Y[, cvfold == i, drop = F]
+    Ytest[[i]]  = lapply(1:m, function(mi) {
+      Ys[[mi]][, cvfold[[mi]] == i, drop = F]
     })
   }
   igamma = 1
   for (gamma in gamma_factors) {
     for (i in 1:nfold) {
-      ntrain = sum(cvfold != i)
+      ntrain = c(sum(cvfold[[1]] != i), sum(cvfold[[2]] != i))
       fit = multiRegression(Xtrain[[i]], Ytrain[[i]], Sk, gamma, ntrain, p, k, trans = F)
       cverr.mat[igamma, i] = obj.multiRegression(Xtest[[i]], Ytest[[i]], fit)
     }
@@ -268,7 +285,8 @@ multiFSSEMiPALM = function(Xs, Ys, Bs, Fs, Sk, sigma2, lambda, rho,
         z  = ci[[k]][,i] * Dets[[k]]
         c2 = sum((ci[[k]][, -i] * Dets[[k]])**2)
         b2 = B2norm[[k]][i]
-        cwiseLipschitz4FSSEM(n[k], z, c2, b2, Y2norm[[k]][i], sigma2)
+        # cwiseLipschitz4FSSEM(n[k], z, c2, b2, Y2norm[[k]][i], sigma2)
+        cwiseLipschitz4FSSEM2B(n[k], z, c2, b2, Y2norm[[k]][i], sigma2, ImBs[[k]], i)
       })
       Li = norm(Li, "2")
       ## Armoji-scheme line-search
@@ -616,6 +634,11 @@ opt.multiFSSEMiPALM = function(Xs, Ys, Bs, Fs, Sk, sigma2, nlambda = 20, nrho = 
   BICmat = data.frame(do.call(rbind, params))
   colnames(BICmat) = c("lambda", "rho", "BIC")
   BICmin = which.min(BICmat$BIC)
-  list(lambda = BICmat[BICmin, 1], rho = BICmat[BICmin, 2], fit = fit[[BICmin]],
+  fitmin = fit[[BICmin]]
+  for(i in 1:m) {
+    fitmin$Bs[[i]] = Matrix(fitmin$Bs[[i]], sparse = TRUE)
+    fitmin$Fs[[i]] = Matrix(fitmin$Fs[[i]], sparse = TRUE)
+  }
+  list(lambda = BICmat[BICmin, 1], rho = BICmat[BICmin, 2], fit = fitmin,
        minBIC = min(BICmat$BIC), fit = fit, BICs = BICmat)
 }

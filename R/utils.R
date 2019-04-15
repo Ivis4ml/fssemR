@@ -88,25 +88,53 @@ cwiseGradient4FSSEM = function(n, c, Y, R, Y2norm, sigma2) {
 }
 
 ## lipschitz computation
-cwiseLipschitzFSSEMv0 = function(n, o, g, s, c2, Deti, Y2norm, sigma2, p) {
-  oxg = tcrossprod(o, g)
-  Imo = diag(p - 1) - g %*% oxg
-  sog = s %*% oxg
-  c = 1 - s %*% tcrossprod(o, s)
-  zta = 1e-12
-  x = -1 * tcrossprod(chol2inv(Imo + diag(p - 1) * zta), sog)
-  Li = n * c2 / (crossprod(x, Imo %*% x) + 2 * sog %*% x + c) / (Deti + 1e-16) + Y2norm / sigma2
-  while(Li < 0) {
-    zta = zta * 10
-    x = -1 * tcrossprod(chol2inv(Imo + diag(p - 1) * zta), sog)
-    Li = n * c2 / (crossprod(x, Imo %*% x) + 2 * sog %*% x + c) / (Deti + 1e-16) + Y2norm / sigma2
-  }
-  Li
-}
+# cwiseLipschitzFSSEMv0 = function(n, o, g, s, c2, Deti, Y2norm, sigma2, p) {
+#  oxg = tcrossprod(o, g)
+#  Imo = diag(p - 1) - g %*% oxg
+#  sog = s %*% oxg
+#  c = 1 - s %*% tcrossprod(o, s)
+#  zta = 1e-12
+#  x = -1 * tcrossprod(chol2inv(Imo + diag(p - 1) * zta), sog)
+#  Li = n * c2 / (crossprod(x, Imo %*% x) + 2 * sog %*% x + c) / (Deti + 1e-16) + Y2norm / sigma2
+#  while(Li < 0) {
+#    zta = zta * 10
+#    x = -1 * tcrossprod(chol2inv(Imo + diag(p - 1) * zta), sog)
+#    Li = n * c2 / (crossprod(x, Imo %*% x) + 2 * sog %*% x + c) / (Deti + 1e-16) + Y2norm / sigma2
+#  }
+#  Li
+#}
 
 ## speed-up lipschitz computation
 cwiseLipschitz4FSSEM = function(n, z, c2, b2, Y2norm, sigma2) {
   n * c2 / (abs(z) - sqrt(c2 * b2))**2 + Y2norm / sigma2
+}
+
+## speed-up lipschitz computation
+## abs(z - c %*% b) >= abs(z) - abs(c %*% b) >= abs(z) - sqrt(c2 * b2)
+cwiseLipschitz4FSSEM2B = function(n, z, c2, b2, Y2norm, sigma2, ImB, i) {
+  if (abs(z) - sqrt(c2 * b2) > 0) {
+    n * c2 / (abs(z) - sqrt(c2 * b2))**2 + Y2norm / sigma2
+  } else {
+    cwiseLipschitzFSSEMv0(n, c2, Y2norm, sigma2, ImB, i)[1]
+    ## Inf
+  }
+}
+
+cwiseLipschitzFSSEMv0 = function(n, c2, Y2norm, sigma2, ImB, i) {
+  ## x^tWx + 2R^tx + C
+  p = nrow(ImB)
+  I = chol2inv(chol(crossprod(ImB[, -i])))
+  D = det(crossprod(ImB[, -i]))
+  W = diag(p - 1) - ImB[-i, -i] %*% tcrossprod(I, ImB[-i, -i])
+  R = ImB[-i, -i] %*% tcrossprod(I, ImB[i, -i, drop = FALSE])
+  C = 1 - ImB[i, -i, drop = FALSE] %*% tcrossprod(I, ImB[i, -i, drop = FALSE])
+  e = 1e-6
+  v = solve(W + diag(e, p - 1), -1 * R)
+  L = n * c2 / (crossprod(v, I %*% v) + 2 * crossprod(R, v) + C) / (D + e) + Y2norm / sigma2
+  if (L < 0) {
+    L = Inf
+  }
+  L
 }
 
 

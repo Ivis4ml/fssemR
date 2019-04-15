@@ -59,14 +59,15 @@ BEGIN_RCPP
   std::vector<MatrixXf> Xs = Rcpp::as<std::vector<MatrixXf> >(Xs_);
   std::vector<MatrixXf> Ys = Rcpp::as<std::vector<MatrixXf> >(Ys_);
   std::vector<ArrayXd>  S  = Rcpp::as<std::vector<ArrayXd> >(S_);
-  const int n = Rcpp::as<int>(n_);
+  // const int n = Rcpp::as<int>(n_);
+  std::vector<int> n = Rcpp::as<std::vector<int> >(n_);
   const int p = Rcpp::as<int>(p_);
   const int k = Rcpp::as<int>(k_);
   const int m = Xs.size();
   double lambda = 0;
   for(int i = 0; i < m; i++)
   {
-    lambda = max(lambda, L2lamax(Xs[i], Ys[i], S, n, p, k));
+    lambda = max(lambda, L2lamax(Xs[i], Ys[i], S, n[i], p, k));
   }
   return Rcpp::wrap(lambda);
 END_RCPP
@@ -79,7 +80,8 @@ BEGIN_RCPP
   std::vector<MatrixXf> Ys = Rcpp::as<std::vector<MatrixXf> >(Ys_);
   const double gamma       = Rcpp::as<double>(gamma_);
   std::vector<ArrayXd>  S  = Rcpp::as<std::vector<ArrayXd> >(S_);
-  const int n = Rcpp::as<int>(n_);
+  // const int n = Rcpp::as<int>(n_);
+  std::vector<int> n = Rcpp::as<std::vector<int> >(n_);
   const int p = Rcpp::as<int>(p_);
   const int k = Rcpp::as<int>(k_);
   const int m = Xs.size();
@@ -93,8 +95,8 @@ BEGIN_RCPP
     Bs[i].resize(p, p);
     Bs[i].setZero();
     fs[i].resize(p);
-    error2 += L2lr(Xs[i], Ys[i], S, Bs[i], fs[i], mu[i], gamma, n, p, k);
-    df += n * p - 1;
+    error2 += L2lr(Xs[i], Ys[i], S, Bs[i], fs[i], mu[i], gamma, n[i], p, k);
+    df += n[i] * p - 1;
   }
   double sigma2 = error2 / df;
   for(int i = 0; i < m; i++)
@@ -322,4 +324,9 @@ BEGIN_RCPP
                             Rcpp::Named("Fs") = Rcpp::wrap(Fs),
                             Rcpp::Named("sigma2") = Rcpp::wrap(sigma2));
 END_RCPP
+}
+
+void R_init_fssemR(DllInfo* info) {
+  R_registerRoutines(info, NULL, NULL, NULL, NULL);
+  R_useDynamicSymbols(info, TRUE);
 }

@@ -2,7 +2,7 @@
 ##' @docType package
 ##' @name fssemR
 ##' @aliases package-fssemR
-##' @useDynLib fssemR
+##' @useDynLib fssemR, .registration=TRUE
 ##' @import Rcpp methods stats MASS glmnet stringr
 ##' @examples
 ##' seed = as.numeric(Sys.time())

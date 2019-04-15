@@ -6,6 +6,9 @@
 #ifdef _OPENMP
 #include <omp.h>
 #endif
+#include <R.h>
+#include <Rinternals.h>
+#include <R_ext/Rdynload.h>
 
 #define epsilon 1e-12
 
