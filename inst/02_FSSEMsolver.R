@@ -1,9 +1,9 @@
 ##' FSSEMsolver
 seed = as.numeric(Sys.time())
 N  = 100                                                              # sample size. 500 sample better than 200 sample, very very
-Ng = 100                                                              # gene number
-Nk = 100 * 3                                                          # eQTL number
-Ns = 100 / Ng                                                          # sparse ratio
+Ng = 10                                                              # gene number
+Nk = 10 * 3                                                          # eQTL number
+Ns = 10 / Ng                                                          # sparse ratio
 sigma2 = 0.01                                                         # sigma2
 set.seed(seed)
 library(fssemR)
