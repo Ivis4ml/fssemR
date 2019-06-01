@@ -101,6 +101,7 @@ plot(diffGRN, displaylabels = TRUE, label = network.vertex.names(GRN_2), label.c
 
 ## ------------------------------------------------------------------------
 diffGRN = Matrix::Matrix(fit$Bs[[1]] - fit$Bs[[2]], sparse = TRUE)
+rownames(diffGRN) = colnames(diffGRN) = rownames(data$Vars$B[[1]])
 diffGRN
 
 ## ------------------------------------------------------------------------
