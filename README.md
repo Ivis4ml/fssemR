@@ -26,3 +26,6 @@ Now, `fssemR` package is uploaded on CRAN. So you will install it via CRAN
 ```r
 install.packages("fssemR")
 ```
+
+## Vignette
+[fssemR-introduction](https://cran.r-project.org/web/packages/fssemR/vignettes/fssemR.pdf)

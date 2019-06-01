@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this vignette, we introduce the functionality of the `fssemR` package to estimate the differential gene regulatory network by gene expression and genetic perturbation data. To meet the space and time constraints in building this vignette within the `fssemR` package, we are going to simulate gene expression and genetic perturbation data instead of using a real dataset. For this purpose, we will use function `randomFSSEMdata` in `fssemR` to generate simulated data, and then apply fused sparse structural equation model (FSSEM) to estimate the GRNs under two different conditions and their differential GRN. Also, please go to `https://github.com/Ivis4ml/fssemR/tree/master/inst` for more large dataset analysis. In conlcusion, this vignette is composed by three sections as follow,
+In this vignette, we introduce the functionality of the `fssemR` package to estimate the differential gene regulatory network by gene expression and genetic perturbation data. To meet the space and time constraints in building this vignette within the `fssemR` package, we are going to simulate gene expression and genetic perturbation data instead of using a real dataset. For this purpose, we will use function `randomFSSEMdata2` in `fssemR` to generate simulated data, and then apply fused sparse structural equation model (FSSEM) to estimate the GRNs under two different conditions and their differential GRN. Also, please go to `https://github.com/Ivis4ml/fssemR/tree/master/inst` for more large dataset analysis. In conlcusion, this vignette is composed by three sections as follow,
 
 - Simulating two GRNs and their eQTL effects under two different conditions 
 - Estimating GRNs from the simulated gene expression data and genetic perturbation data
@@ -169,6 +169,7 @@ plot(diffGRN, displaylabels = TRUE, label = network.vertex.names(GRN_2), label.c
 Additionally, the differeitial effect of two GRN are also estimated. Therefore, we can tell how the interactions in two GRNs change.
 ```{r}
 diffGRN = Matrix::Matrix(fit$Bs[[1]] - fit$Bs[[2]], sparse = TRUE)
+rownames(diffGRN) = colnames(diffGRN) = rownames(data$Vars$B[[1]])
 diffGRN
 ```
 
