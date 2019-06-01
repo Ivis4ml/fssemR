@@ -1,6 +1,6 @@
 Package: fssemR
 Title: Fused Sparse Structural Equation Models to Jointly Infer Gene Regulatory Network
-Version: 0.1.4
+Version: 0.1.5
 Author: Xin Zhou, Xiaodong Cai
 Maintainer: Xin Zhou <xxz220@miami.edu>
 Description: An optimizer of Fused-Sparse Structural Equation Models, which is 
