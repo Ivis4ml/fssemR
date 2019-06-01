@@ -15,11 +15,11 @@ n = c(100, 100)    # number of observations in two conditions
 p = 20             # number of genes in our simulation
 k = 3              # each gene has nonzero 3 cis-eQTL effect
 sigma2 = 0.01      # simulated noise variance
-prob = 4           # average number of edges connected to each gene
+prob = 3           # average number of edges connected to each gene
 type = "DG"        # `fssemR` also offers simulated ER and directed graph (DG) network
 dag  = TRUE        # if DG is simulated, user can select to simulate DAG or DCG
-seed = as.numeric(Sys.time())  # any seed acceptable
-## seed = 100         # set.seed(100)
+## seed = as.numeric(Sys.time())  # any seed acceptable
+seed = 1234        # set.seed(100)
 set.seed(seed)
 data = randomFSSEMdata2(n = n, p = p, k = p * k, sparse = prob / 2, df = 0.3, 
                         sigma2 = sigma2, type = type, dag = T)
