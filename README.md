@@ -28,4 +28,4 @@ install.packages("fssemR")
 ```
 
 ## Vignette
-[fssemR-introduction](https://drive.google.com/drive/folders/1nhN1BMbVGUvB15Ao5JAnLDrs_eNE2hqj)
+[fssemR-introduction](https://github.com/Ivis4ml/fssemR/blob/master/inst/doc/fssemR.pdf)
