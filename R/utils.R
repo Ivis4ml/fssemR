@@ -338,7 +338,3 @@ bayesianInfocriterion2 = function(Xs, Ys, Bs, Fs, mu, Dets, sigma2, p) {
   df = df + sum(Bs[[2]] - Bs[[1]] == 0 & Bs[[1]] != 0) + 1
   2 * logl + df * (log(n[1]) + log(n[2]))
 }
-
-
-
-

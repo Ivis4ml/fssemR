@@ -28,4 +28,4 @@ install.packages("fssemR")
 ```
 
 ## Vignette
-[fssemR-introduction](https://cran.r-project.org/web/packages/fssemR/vignettes/fssemR.pdf)
+[fssemR-introduction](https://github.com/Ivis4ml/fssemR/blob/master/inst/doc/fssemR.pdf)
