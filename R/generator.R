@@ -461,7 +461,7 @@ randomFSSEMdata2 = function(n, p, k, sparse = 0.1, df = 0.2, sigma2 = 0.01, u = 
 ##' @param dag  network is directed-acyclic or not. Default TRUE
 ##' @param coef Range of absolute value of coefficients in simulated network matrices. Default (0.2, 0.4), or (0.5, 1)
 ##' @param nhub If you select to generate ER network, nhub is the number of pre-defined hub node number. Default 2
-##' @param r  correlation of 
+##' @param r  correlation between different observations
 ##' @return list of generated data
 ##' \describe{
 ##' \item{Data}{ List of observed, Xs, Ys, Sk }

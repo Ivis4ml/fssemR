@@ -29,3 +29,6 @@ install.packages("fssemR")
 
 ## Vignette
 [fssemR-introduction](https://github.com/Ivis4ml/fssemR/blob/master/inst/doc/fssemR.pdf)
+
+## Citation
+Xin Zhou, Xiaodong Cai, Inference of differential gene regulatory networks based on gene expression and genetic perturbation data, Bioinformatics, , btz529, https://doi.org/10.1093/bioinformatics/btz529

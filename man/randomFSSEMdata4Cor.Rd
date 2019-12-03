@@ -30,6 +30,8 @@ randomFSSEMdata4Cor(n, p, k, sparse = 0.1, df = 0.2, sigma2 = 0.01,
 \item{coef}{Range of absolute value of coefficients in simulated network matrices. Default (0.2, 0.4), or (0.5, 1)}
 
 \item{nhub}{If you select to generate ER network, nhub is the number of pre-defined hub node number. Default 2}
+
+\item{r}{correlation between different observations}
 }
 \value{
 list of generated data
