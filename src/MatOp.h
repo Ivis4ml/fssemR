@@ -119,7 +119,7 @@ inline void center(MatType& X, MatType& meanX, bool trans = false) {
     begin = &X(0, i);
     end   = begin + n;
     meanX(i, 0) = X.col(i).mean();
-    std::transform(begin, end, begin, std::bind2nd(std::minus<float>(), meanX(i, 0)));
+    std::transform(begin, end, begin, std::bind(std::minus<float>(), std::placeholders::_1, meanX(i, 0)));
   }
   if(trans) {
     X.transposeInPlace();
