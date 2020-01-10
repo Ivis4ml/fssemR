@@ -4,8 +4,21 @@
 \alias{cv.multiFSSEMiPALM2}
 \title{cv.multiFSSEMiPALM2}
 \usage{
-cv.multiFSSEMiPALM2(Xs, Ys, Bs, Fs, Sk, sigma2, nlambda = 20,
-  nrho = 20, nfold = 5, p, q, wt = TRUE, plot = FALSE)
+cv.multiFSSEMiPALM2(
+  Xs,
+  Ys,
+  Bs,
+  Fs,
+  Sk,
+  sigma2,
+  nlambda = 20,
+  nrho = 20,
+  nfold = 5,
+  p,
+  q,
+  wt = TRUE,
+  plot = FALSE
+)
 }
 \arguments{
 \item{Xs}{eQTL matrices}

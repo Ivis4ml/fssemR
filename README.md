@@ -1,4 +1,4 @@
-## Introduction
+## fssemR
 [![CRAN status](https://www.r-pkg.org/badges/version/fssemR)](https://cran.r-project.org/package=fssemR)
 [![CRAN download](https://cranlogs.r-pkg.org/badges/fssemR)](https://cranlogs.r-pkg.org/badges/fssemR)
 

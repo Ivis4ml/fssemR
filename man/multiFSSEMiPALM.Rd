@@ -4,10 +4,27 @@
 \alias{multiFSSEMiPALM}
 \title{multiFSSEMiPALM}
 \usage{
-multiFSSEMiPALM(Xs, Ys, Bs, Fs, Sk, sigma2, lambda, rho, Wl, Wf, p,
-  maxit = 100, inert = inert_opt("linear"), threshold = 1e-06,
-  verbose = TRUE, sparse = TRUE, trans = FALSE, B2norm = NULL,
-  strict = FALSE)
+multiFSSEMiPALM(
+  Xs,
+  Ys,
+  Bs,
+  Fs,
+  Sk,
+  sigma2,
+  lambda,
+  rho,
+  Wl,
+  Wf,
+  p,
+  maxit = 100,
+  inert = inert_opt("linear"),
+  threshold = 1e-06,
+  verbose = TRUE,
+  sparse = TRUE,
+  trans = FALSE,
+  B2norm = NULL,
+  strict = FALSE
+)
 }
 \arguments{
 \item{Xs}{eQTL matrices}

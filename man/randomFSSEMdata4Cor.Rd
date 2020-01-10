@@ -4,9 +4,20 @@
 \alias{randomFSSEMdata4Cor}
 \title{randomFSSEMdata4Cor}
 \usage{
-randomFSSEMdata4Cor(n, p, k, sparse = 0.1, df = 0.2, sigma2 = 0.01,
-  u = 5, type = c("DG", "ER"), dag = TRUE, coef = c(0.2, 0.4),
-  nhub = 2, r = 0.5)
+randomFSSEMdata4Cor(
+  n,
+  p,
+  k,
+  sparse = 0.1,
+  df = 0.2,
+  sigma2 = 0.01,
+  u = 5,
+  type = c("DG", "ER"),
+  dag = TRUE,
+  coef = c(0.2, 0.4),
+  nhub = 2,
+  r = 0.5
+)
 }
 \arguments{
 \item{n}{number of observations. Vector for unbalance observations}

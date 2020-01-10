@@ -4,7 +4,6 @@
 \name{fssemR}
 \alias{fssemR}
 \alias{package-fssemR}
-\alias{fssemR-package}
 \title{Solving Sparse Structural Equation Model}
 \description{
 Solving Sparse Structural Equation Model

@@ -4,8 +4,19 @@
 \alias{opt.multiFSSEMiPALM}
 \title{opt.multiFSSEMiPALM}
 \usage{
-opt.multiFSSEMiPALM(Xs, Ys, Bs, Fs, Sk, sigma2, nlambda = 20,
-  nrho = 20, p, q, wt = TRUE)
+opt.multiFSSEMiPALM(
+  Xs,
+  Ys,
+  Bs,
+  Fs,
+  Sk,
+  sigma2,
+  nlambda = 20,
+  nrho = 20,
+  p,
+  q,
+  wt = TRUE
+)
 }
 \arguments{
 \item{Xs}{eQTL matrices}

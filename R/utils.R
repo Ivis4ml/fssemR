@@ -115,6 +115,7 @@ cwiseLipschitz4FSSEM2B = function(n, z, c2, b2, Y2norm, sigma2, ImB, i) {
   if (abs(z) - sqrt(c2 * b2) > 0) {
     n * c2 / (abs(z) - sqrt(c2 * b2))**2 + Y2norm / sigma2
   } else {
+    ## n * c2 / (abs(z) - sqrt(c2 * b2))**2 + Y2norm / sigma2
     cwiseLipschitzFSSEMv0(n, c2, Y2norm, sigma2, ImB, i)[1]
     ## Inf
   }
@@ -123,12 +124,12 @@ cwiseLipschitz4FSSEM2B = function(n, z, c2, b2, Y2norm, sigma2, ImB, i) {
 cwiseLipschitzFSSEMv0 = function(n, c2, Y2norm, sigma2, ImB, i) {
   ## x^tWx + 2R^tx + C
   p = nrow(ImB)
-  I = chol2inv(chol(crossprod(ImB[, -i])))
-  D = det(crossprod(ImB[, -i]))
+  e = 1e-6
+  I = chol2inv(chol(crossprod(ImB[, -i]) + diag(e, p - 1)))
+  D = det(crossprod(ImB[, -i]) + diag(e, p - 1))
   W = diag(p - 1) - ImB[-i, -i] %*% tcrossprod(I, ImB[-i, -i])
   R = ImB[-i, -i] %*% tcrossprod(I, ImB[i, -i, drop = FALSE])
   C = 1 - ImB[i, -i, drop = FALSE] %*% tcrossprod(I, ImB[i, -i, drop = FALSE])
-  e = 1e-6
   v = solve(W + diag(e, p - 1), -1 * R)
   L = n * c2 / (crossprod(v, I %*% v) + 2 * crossprod(R, v) + C) / (D + e) + Y2norm / sigma2
   if (L < 0) {
@@ -148,6 +149,29 @@ proxFLSA = function(u, w, r, lambda, rho, c) {
     (u[[1]] + u[[2]]) / 2 * eQ + (u[[1]] - sign(D) * rho * r / c) * Df,
     (u[[1]] + u[[2]]) / 2 * eQ + (u[[2]] + sign(D) * rho * r / c) * Df
   )
+  lapply(1:2, function(k) {
+    xe = pmax(x[[k]] - lambda * (w[[1]] + w[[2]]) / 2 / c, 0) + pmin(x[[k]] + lambda * (w[[1]] + w[[2]]) / 2 / c, 0)
+    xd = pmax(x[[k]] - lambda * w[[k]] / c, 0) + pmin(x[[k]] + lambda * w[[k]] / c, 0)
+    xe * eQ + xd * Df
+  })
+}
+
+## Proximal operator for PNSA
+proxPNSA = function(u, w, r, lambda, rho, c) {
+  p  = length(u[[1]])
+  D  = cbind(diag(p), -diag(p))
+  U  = matrix(c(u[[1]], u[[2]]), nrow = 1)
+  v  = tcrossprod(D, U)[,1]
+  eQ = (norm(v, "2")[1] <= 2 * rho * r / c)
+  Df = 1 - eQ
+  rho = min(rho, 1e16)
+  x = if (eQ) {
+    list((u[[1]] + u[[2]]) / 2,
+         (u[[1]] + u[[2]]) / 2)
+  } else {
+    v = rho * r / c * v / norm(v, "2")[1]
+    list(u[[1]] - v, u[[2]] + v)
+  }
   lapply(1:2, function(k) {
     xe = pmax(x[[k]] - lambda * (w[[1]] + w[[2]]) / 2 / c, 0) + pmin(x[[k]] + lambda * (w[[1]] + w[[2]]) / 2 / c, 0)
     xd = pmax(x[[k]] - lambda * w[[k]] / c, 0) + pmin(x[[k]] + lambda * w[[k]] / c, 0)
@@ -209,6 +233,28 @@ flinvB = function(Bs) {
 ##' @export
 floneB = function(Bs) {
   1 / abs(sign(Bs[[2]] - Bs[[1]]))
+}
+
+##' @title pninvB
+##' @description inversed column l2 norm for perturbed group lasso penalty
+##' @param Bs list of network matrices
+##' @return inversed l2 norm of B2 - B1
+##' @export
+pninvB = function(Bs) {
+  apply(Bs[[1]] - Bs[[2]], 2, function(x) {
+    1 / norm(x, "2")
+  })
+}
+
+##' @title pnoneB
+##' @description if you do not want adaptive group lasso penalty, pnoneB replace pninvB
+##' @param Bs list of network matrices
+##' @return inversed l2 norm of B2 - B1 with all entries is 1
+##' @export
+pnoneB = function(Bs) {
+  apply(Bs[[1]] - Bs[[2]], 2, function(x) {
+    1
+  })
 }
 
 logLiklihood = function(Xs, Ys, Bs, Fs, mu, Dets, sigma2, p) {
@@ -274,6 +320,7 @@ TPR = function(X, B, PREC = 0) {
 FDR = function(X, B, PREC = 0) {
   X = as.matrix(X)
   B = as.matrix(B)
+  # PREC = max(PREC, 0.05)
   if(sum(X != 0) != 0) {
     sum(abs(X[B == 0]) > PREC) / sum(X != 0)
   } else {
@@ -337,4 +384,48 @@ bayesianInfocriterion2 = function(Xs, Ys, Bs, Fs, mu, Dets, sigma2, p) {
   }
   df = df + sum(Bs[[2]] - Bs[[1]] == 0 & Bs[[1]] != 0) + 1
   2 * logl + df * (log(n[1]) + log(n[2]))
+}
+
+## BIC for node-based penalty
+bayesianInfocriterion3 = function(Xs, Ys, Bs, Fs, mu, Dets, sigma2, p) {
+  logl = 0
+  m = length(Ys)
+  n = sapply(Ys, ncol)
+  df = 0
+  for(i in 1:m) {
+    err  = norm(Ys[[i]] - Bs[[i]] %*% Ys[[i]] - Fs[[i]] %*% Xs[[i]] - tcrossprod(mu[[i]], rep(1, n[i])), "f")**2
+    logl = logl - n[i] / 2 * log(Dets[i]**2) + n[i] * p / 2 * log(sigma2) + err / (2 * sigma2)
+    df = df + sum(colSums((Bs[[2]] - Bs[[1]])**2) != 0 & colSums(Bs[[i]]**2) != 0) * p + p
+  }
+  df = df + sum(colSums((Bs[[2]] - Bs[[1]])**2) == 0 & colSums(Bs[[1]]**2) != 0) * p + 1
+  2 * logl + df * (log(n[1]) + log(n[2]))
+}
+
+
+
+## logliklihood of NFSSEM
+##' @title logLikNFSSEM
+##' @param Bs  Network matrices
+##' @param Wl  Weights for lasso term
+##' @param Wf  Weights for group perturb lasso term
+##' @param lambda Hyperparameter of lasso term
+##' @param rho Hyperparameter of group fused lasso term
+##' @param sigma2 noise variance
+##' @param Dets determinants of I-B matrices
+##' @param n number of observations
+##' @param p number of genes
+##' @return objective value of NFSSEM with specified hyper-paramters
+logLikNFSSEM = function(Bs, Wl, Wf, lambda, rho, sigma2, Dets, n, p) {
+  K = length(Bs)
+  loglik = 0
+  l1 = 0
+  lf = 0
+  rho = min(rho, 1e12)
+  lf = rho * Wf * sqrt(colSums((Bs[[2]] - Bs[[1]])**2))
+  for (k in 1:K) {
+    l1 = l1 + lambda * Wl[[k]] * abs(Bs[[k]])
+    loglik = loglik - n[k] / 2 * log(Dets[k]**2)
+  }
+  diag(l1) = 0
+  loglik + p * sum(n) / 2 * log(sigma2) + sum(l1) + sum(lf)
 }
