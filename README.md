@@ -32,3 +32,7 @@ install.packages("fssemR")
 
 ## Citation
 Xin Zhou, Xiaodong Cai, Inference of differential gene regulatory networks based on gene expression and genetic perturbation data, Bioinformatics, , btz529, https://doi.org/10.1093/bioinformatics/btz529
+
+## Update
+Upgrade to Eigen 0.3.4 compatible
+
