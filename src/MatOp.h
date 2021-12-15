@@ -131,7 +131,7 @@ template<class MatType, class RowIndexType>
 inline void set_Row(MatType& F, const MatType& fi, const RowIndexType& ix, int i) {
   int s = fi.rows();
   for(int j = 0; j < s; j++) {
-    F(ix(j) - 1, i) = fi(j, 0);
+    F(static_cast<int>(ix(j) - 1), i) = fi(j, 0);
   }
 }
 
@@ -140,7 +140,7 @@ template<class MatType, class ColIndexType>
 inline void set_Col(MatType& F, const MatType& fi, const ColIndexType& ix, int i) {
   int s = fi.rows();
   for(int j = 0; j < s; j++) {
-    F(i, ix(j) - 1) = fi(j, 0);
+    F(i, static_cast<int>(ix(j) - 1)) = fi(j, 0);
   }
 }
 
