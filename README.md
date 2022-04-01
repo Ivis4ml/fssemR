@@ -36,5 +36,5 @@ Xin Zhou, Xiaodong Cai, Inference of differential gene regulatory networks based
 ## Update
 Upgrade to Eigen 0.3.4 compatible
 
-##Acknowledgement
+## Acknowledgement
 Thank should go to Yilun Zhang <3100105044@zju.edu.cn><zhangyilun.123@bytedance.com> for his contribution to the optimization for this package in math and implementation.
